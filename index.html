@@ -12,7 +12,12 @@
         
         .header { text-align: center; margin-bottom: 20px; }
         .header h2 { color: #1e293b; margin: 0; font-size: 22px; font-weight: 700; letter-spacing: -0.5px; }
-        .header p { color: #64748b; font-size: 14px; margin-top: 5px; }
+        
+        /* Salesman Profile Input */
+        .user-profile { background: #eff6ff; border: 1px dashed #93c5fd; padding: 10px; border-radius: 8px; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
+        .user-profile input { flex: 1; border: none; background: transparent; font-size: 15px; font-weight: 600; color: #1d4ed8; font-family: inherit; outline: none; }
+        .user-profile input::placeholder { color: #93c5fd; font-weight: 400; }
+        .user-icon { background: #3b82f6; color: white; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; }
 
         #text-output { width: 100%; height: 120px; padding: 15px; border: 1.5px solid #e2e8f0; border-radius: 12px; font-size: 16px; font-family: inherit; box-sizing: border-box; resize: none; background-color: #f8fafc; transition: all 0.3s ease; line-height: 1.5; }
         #text-output:focus { outline: none; border-color: #3b82f6; background-color: #fff; box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1); }
@@ -31,17 +36,13 @@
         .chip-btn:hover { background: #c7d2fe; }
         .chip-btn:active { transform: scale(0.95); }
         
-        /* New styling for the recent button to make it stand out */
         .recent-btn { background: #fce7f3; color: #db2777; border-color: #fbcfe8; width: 100%; margin-bottom: 12px; }
-        .recent-btn:hover { background: #fbcfe8; }
 
         .search-box { width: 100%; padding: 12px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 14px; font-family: inherit; margin-bottom: 0; box-sizing: border-box; }
         .search-box:focus { outline: none; border-color: #3b82f6; }
 
         .filter-container { display: flex; gap: 10px; }
-        
-        input[type="number"]::-webkit-inner-spin-button, 
-        input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+        input[type="number"]::-webkit-inner-spin-button, input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
         input[type="number"] { -moz-appearance: textfield; }
 
         #days-input { width: 35%; padding: 12px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 14px; text-align: center; font-family: inherit; }
@@ -70,7 +71,12 @@
 <div class="container">
     <div class="header">
         <h2>Smart Lead Tracker</h2>
-        <p>Tap the mic on your keyboard to dictate notes.</p>
+    </div>
+
+    <!-- New Profile Section -->
+    <div class="user-profile">
+        <div class="user-icon">👤</div>
+        <input type="text" id="salesman-name" placeholder="Enter Your Name (e.g. Rahul)" oninput="saveName()">
     </div>
 
     <textarea id="text-output" placeholder="e.g., Rajesh from Rajasthan needs Kurti & Pant. Budget is 25000..."></textarea>
@@ -79,7 +85,6 @@
     <div class="dashboard-section">
         <div id="status-msg">System Ready 🟢</div>
         
-        <!-- SECTION 1: Follow-up Dates Filter -->
         <h4 class="section-title">🗓️ Date Filters</h4>
         
         <div class="chip-container">
@@ -94,9 +99,7 @@
         
         <div class="divider"></div>
 
-        <!-- SECTION 2: Verification and Search -->
         <h4 class="section-title">🔍 Search & Verify</h4>
-        
         <button class="chip-btn recent-btn" onclick="fetchRecentSaves()">Check Recent Saves 🕒</button>
 
         <div class="filter-container">
@@ -104,50 +107,89 @@
             <button class="action-btn" style="width: 35%;" onclick="searchCustomer()">Search</button>
         </div>
         
-        <!-- List will appear here -->
         <div id="upcoming-list"></div>
     </div>
 </div>
 
 <script>
+    // 👇 YOUR WEB APP URL GOES HERE 👇
+    const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyHg8Pidcsn9UODAwzSpti5UynmkIkmiKHBTOac_fN8CURXa5ZtYIreEvFMxoI1mG21/exec'; 
+
     const saveBtn = document.getElementById('save-btn');
     const textOutput = document.getElementById('text-output');
     const statusMsg = document.getElementById('status-msg');
     const upcomingList = document.getElementById('upcoming-list');
     const daysInput = document.getElementById('days-input');
     const searchInput = document.getElementById('search-input');
+    const salesmanInput = document.getElementById('salesman-name');
 
-    // 👇 YOUR WEB APP URL GOES HERE 👇
-    const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbzjsrRciq5Vluicx4NvxEsga5G8rmfhT1YuBX3BJCM6Z2tTO90FhjJxZJJ7hVrFOkkFLA/exec'; 
+    // Load saved name when app opens
+    window.onload = () => {
+        const savedName = localStorage.getItem('salesman_name');
+        if (savedName) salesmanInput.value = savedName;
+    };
+
+    // Save name to phone's memory automatically
+    function saveName() {
+        localStorage.setItem('salesman_name', salesmanInput.value.trim());
+    }
+
+    // Get current salesman name
+    function getSalesmanName() {
+        const name = salesmanInput.value.trim();
+        if(name === "") return "Unknown Salesman";
+        // Title case format (e.g. "rahul" -> "Rahul")
+        return name.charAt(0).toUpperCase() + name.slice(1).toLowerCase();
+    }
 
     let isSubmitting = false; 
 
-    // Save Entry Logic
+    // Save Entry Logic (No AI - Super Fast)
     saveBtn.addEventListener('click', async () => {
         if (isSubmitting) return; 
 
-        const recordedText = textOutput.value.trim();
-        if(recordedText === "") { 
-            alert("Please enter some text first!"); 
-            return; 
+        if(salesmanInput.value.trim() === "") {
+            alert("Please enter your name at the top first!");
+            salesmanInput.focus();
+            return;
         }
+
+        const recordedText = textOutput.value.trim();
+        if(recordedText === "") { alert("Please enter some text first!"); return; }
+        
+        // --- यहाँ हम कॉमा (,) के हिसाब से डेटा को अलग-अलग कर रहे हैं ---
+        const parts = recordedText.split(',');
+        const parsedData = {
+            name: parts[0] ? parts[0].trim() : "Unknown",
+            place: parts[1] ? parts[1].trim() : "N/A",
+            req: parts[2] ? parts[2].trim() : "None",
+            budget: parts[3] ? parts[3].trim() : "N/A",
+            date: parts[4] ? parts[4].trim() : "N/A"
+        };
+
+        const currentSalesman = getSalesmanName();
         
         isSubmitting = true;
-        saveBtn.innerText = "Processing... ⏳"; 
+        saveBtn.innerText = "Saving Fast... ⚡"; 
         saveBtn.disabled = true; 
-        statusMsg.innerHTML = "Processing your data...";
-        statusMsg.style.background = "#fef9c3"; 
-        statusMsg.style.color = "#854d0e";
+        statusMsg.innerHTML = "Saving directly to sheet...";
+        statusMsg.style.background = "#e0f2fe"; 
+        statusMsg.style.color = "#0284c7";
 
         try {
+            // अब हम कटा-छटा डेटा सीधा बैकएंड को भेज रहे हैं
             const response = await fetch(WEB_APP_URL, { 
                 method: 'POST', 
-                body: JSON.stringify({ text: recordedText }) 
+                body: JSON.stringify({ 
+                    raw: recordedText, 
+                    parsed: parsedData, 
+                    salesman: currentSalesman 
+                }) 
             });
             const result = await response.json();
             
             if(result.status === "success") {
-                statusMsg.innerHTML = "✅ Data saved successfully! (Click 'Check Recent Saves' below to verify)";
+                statusMsg.innerHTML = "✅ Saved instantly in " + currentSalesman + "'s sheet!";
                 statusMsg.style.background = "#dcfce7";
                 statusMsg.style.color = "#166534";
                 textOutput.value = ""; 
@@ -159,28 +201,20 @@
                 throw new Error(result.message);
             }
         } catch (error) {
-            statusMsg.innerHTML = "⚠️ <b>Network Issue!</b> Check 'Recent Saves 🕒' below before trying again.";
+            statusMsg.innerHTML = "⚠️ <b>Network Issue!</b> Check 'Recent Saves' below.";
             statusMsg.style.background = "#fee2e2";
             statusMsg.style.color = "#991b1b";
             
-            let secondsLeft = 10;
+            let secondsLeft = 5; // टाइमआउट 10 सेकंड से घटाकर 5 कर दिया
             saveBtn.innerText = `Locked (${secondsLeft}s)...`;
-            
             const countdown = setInterval(() => {
                 secondsLeft--;
-                if (secondsLeft > 0) {
-                    saveBtn.innerText = `Locked (${secondsLeft}s)...`;
-                } else {
-                    clearInterval(countdown);
-                    isSubmitting = false;
-                    saveBtn.innerText = "Retry Save 💾"; 
-                    saveBtn.disabled = false; 
-                }
+                if (secondsLeft > 0) { saveBtn.innerText = `Locked (${secondsLeft}s)...`; } 
+                else { clearInterval(countdown); isSubmitting = false; saveBtn.innerText = "Retry Save 💾"; saveBtn.disabled = false; }
             }, 1000);
         }
     });
 
-    // Generate HTML for Cards
     function createCardHTML(item, showTimestamp = false) {
         let placeBudgetTxt = "";
         if(item.place !== "N/A" || item.budget !== "N/A") {
@@ -205,38 +239,36 @@
             </div>`;
     }
 
-    // Fetch by Days
+    // Helper to fetch data ONLY for the current salesman
+    async function fetchDataForUser() {
+        const currentSalesman = getSalesmanName();
+        // Send salesman name in the URL so backend knows whose data to send
+        const url = `${WEB_APP_URL}?user=${encodeURIComponent(currentSalesman)}`;
+        const response = await fetch(url);
+        return await response.json();
+    }
+
     async function fetchLeads(days) {
+        if(salesmanInput.value.trim() === "") { alert("Please enter your name first!"); return; }
         upcomingList.innerHTML = "<p style='text-align:center;'>Fetching... ⏳</p>"; 
         try {
-            const response = await fetch(WEB_APP_URL);
-            const data = await response.json();
+            const data = await fetchDataForUser();
+            const today = new Date(); today.setHours(0,0,0,0);
+            const targetDate = new Date(); targetDate.setDate(today.getDate() + days);
             
-            const today = new Date();
-            today.setHours(0,0,0,0);
-            const targetDate = new Date();
-            targetDate.setDate(today.getDate() + days);
-            
-            let html = "";
-            let count = 0;
-            
+            let html = ""; let count = 0;
             data.forEach(item => {
                 if(item.followUpDate && item.followUpDate !== "N/A" && item.followUpDate.includes("/")) {
                     const parts = item.followUpDate.split("/");
                     const fDate = new Date(parts[2], parts[1]-1, parts[0]); 
-                    if(fDate >= today && fDate <= targetDate) {
-                        count++;
-                        html += createCardHTML(item);
-                    }
+                    if(fDate >= today && fDate <= targetDate) { count++; html += createCardHTML(item); }
                 }
             });
 
-            if(html === "") html = `<div class="summary-badge" style="background:#f8fafc; color:#475569;">👍 No follow-ups for the next ${days} days!</div>`;
+            if(html === "") html = `<div class="summary-badge" style="background:#f8fafc; color:#475569;">👍 No follow-ups for ${getSalesmanName()} in next ${days} days!</div>`;
             else html = `<div class="summary-badge">Found ${count} follow-up(s)</div>` + html;
             upcomingList.innerHTML = html;
-        } catch (error) {
-            upcomingList.innerHTML = "❌ Failed to fetch list. Check internet.";
-        }
+        } catch (error) { upcomingList.innerHTML = "❌ Failed to fetch list."; }
     }
 
     function fetchCustomLeads() {
@@ -245,55 +277,38 @@
         fetchLeads(customDays);
     }
 
-    // Recent Saves Feature
     async function fetchRecentSaves() {
+        if(salesmanInput.value.trim() === "") { alert("Please enter your name first!"); return; }
         upcomingList.innerHTML = "<p style='text-align:center;'>Checking Sheet... ⏳</p>"; 
         try {
-            const response = await fetch(WEB_APP_URL);
-            const data = await response.json();
-            
-            let html = `<div class="summary-badge" style="background:#fce7f3; color:#db2777;">Latest 5 Entries in Sheet</div>`;
-            
-            // Reverse data to get latest first, slice top 5
+            const data = await fetchDataForUser();
+            let html = `<div class="summary-badge" style="background:#fce7f3; color:#db2777;">Latest 5 Entries for ${getSalesmanName()}</div>`;
             const recentData = data.reverse().slice(0, 5);
             recentData.forEach(item => { html += createCardHTML(item, true); });
-            
             upcomingList.innerHTML = html;
-        } catch (error) {
-            upcomingList.innerHTML = "❌ Failed to check recent saves.";
-        }
+        } catch (error) { upcomingList.innerHTML = "❌ Failed to check recent saves."; }
     }
 
-    // Search Feature
     async function searchCustomer() {
+        if(salesmanInput.value.trim() === "") { alert("Please enter your name first!"); return; }
         const query = searchInput.value.toLowerCase().trim();
         if(query === "") { alert("Enter name or place to search!"); return; }
         
         upcomingList.innerHTML = "<p style='text-align:center;'>Searching... 🔍</p>"; 
         try {
-            const response = await fetch(WEB_APP_URL);
-            const data = await response.json();
-            
-            let html = "";
-            let count = 0;
-            
+            const data = await fetchDataForUser();
+            let html = ""; let count = 0;
             data.reverse().forEach(item => {
                 const nameMatch = item.name && item.name.toLowerCase().includes(query);
                 const placeMatch = item.place && item.place.toLowerCase().includes(query);
                 const reqMatch = item.req && item.req.toLowerCase().includes(query);
-                
-                if(nameMatch || placeMatch || reqMatch) {
-                    count++;
-                    html += createCardHTML(item);
-                }
+                if(nameMatch || placeMatch || reqMatch) { count++; html += createCardHTML(item); }
             });
 
             if(html === "") html = `<div class="summary-badge" style="background:#fee2e2; color:#991b1b;">No results found for "${query}"</div>`;
             else html = `<div class="summary-badge">Found ${count} result(s) for "${query}"</div>` + html;
             upcomingList.innerHTML = html;
-        } catch (error) {
-            upcomingList.innerHTML = "❌ Search failed. Check internet.";
-        }
+        } catch (error) { upcomingList.innerHTML = "❌ Search failed."; }
     }
 </script>
 
