@@ -27,20 +27,19 @@
         #status-msg { font-size: 13px; color: #475569; background: #e2e8f0; padding: 8px 12px; border-radius: 6px; margin-bottom: 20px; text-align: center; font-weight: 500; }
 
         .chip-container { display: flex; gap: 8px; margin-bottom: 12px; }
-        .chip-btn { flex: 1; background: #e0e7ff; color: #4f46e5; border: 1px solid #c7d2fe; padding: 8px 5px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; transition: 0.2s; }
+        .chip-btn { flex: 1; background: #e0e7ff; color: #4f46e5; border: 1px solid #c7d2fe; padding: 10px 5px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; transition: 0.2s; }
         .chip-btn:hover { background: #c7d2fe; }
         .chip-btn:active { transform: scale(0.95); }
         
-        .recent-btn { background: #fce7f3; color: #db2777; border-color: #fbcfe8; }
+        /* New styling for the recent button to make it stand out */
+        .recent-btn { background: #fce7f3; color: #db2777; border-color: #fbcfe8; width: 100%; margin-bottom: 12px; }
         .recent-btn:hover { background: #fbcfe8; }
 
-        /* Search & Filter Boxes */
-        .search-box { width: 100%; padding: 12px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 14px; font-family: inherit; margin-bottom: 12px; box-sizing: border-box; }
+        .search-box { width: 100%; padding: 12px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 14px; font-family: inherit; margin-bottom: 0; box-sizing: border-box; }
         .search-box:focus { outline: none; border-color: #3b82f6; }
 
         .filter-container { display: flex; gap: 10px; }
         
-        /* Removed Spinner Arrows from Number Input */
         input[type="number"]::-webkit-inner-spin-button, 
         input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
         input[type="number"] { -moz-appearance: textfield; }
@@ -51,11 +50,12 @@
         .action-btn { width: 65%; background: #0f172a; color: white; border: none; border-radius: 8px; font-size: 14px; cursor: pointer; font-weight: 600; }
         .action-btn:active { transform: scale(0.98); }
 
+        .divider { border-top: 1px dashed #cbd5e1; margin: 25px 0; }
+
         #upcoming-list { margin-top: 20px; }
         .task-card { background: #ffffff; padding: 15px; border-radius: 10px; border: 1px solid #e2e8f0; margin-bottom: 12px; box-shadow: 0 2px 4px rgba(0,0,0,0.02); text-align: left; }
         .task-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px; }
         
-        /* Updated Name & Place Layout */
         .task-name-group { display: flex; flex-direction: column; }
         .task-name { font-weight: 600; color: #1e293b; font-size: 15px; }
         .task-meta { font-size: 12px; color: #64748b; margin-top: 2px; }
@@ -79,26 +79,32 @@
     <div class="dashboard-section">
         <div id="status-msg">System Ready 🟢</div>
         
-        <h4 class="section-title">🗓️ Dashboard & Search</h4>
+        <!-- SECTION 1: Follow-up Dates Filter -->
+        <h4 class="section-title">🗓️ Date Filters</h4>
         
         <div class="chip-container">
             <button class="chip-btn" onclick="fetchLeads(7)">This Week</button>
             <button class="chip-btn" onclick="fetchLeads(30)">This Month</button>
-            <button class="chip-btn recent-btn" onclick="fetchRecentSaves()">Recent Saves 🕒</button>
-        </div>
-        
-        <!-- Search by Name or Location -->
-        <div class="filter-container" style="margin-bottom: 12px;">
-            <input type="text" id="search-input" class="search-box" style="margin-bottom: 0; width: 65%;" placeholder="Search name/place...">
-            <button class="action-btn" style="width: 35%;" onclick="searchCustomer()">Search</button>
         </div>
 
-        <!-- Filter by Custom Days -->
         <div class="filter-container">
             <input type="number" id="days-input" placeholder="Custom Days" min="1">
             <button class="action-btn" onclick="fetchCustomLeads()">Filter by Days</button>
         </div>
         
+        <div class="divider"></div>
+
+        <!-- SECTION 2: Verification and Search -->
+        <h4 class="section-title">🔍 Search & Verify</h4>
+        
+        <button class="chip-btn recent-btn" onclick="fetchRecentSaves()">Check Recent Saves 🕒</button>
+
+        <div class="filter-container">
+            <input type="text" id="search-input" class="search-box" style="width: 65%;" placeholder="Search name/place...">
+            <button class="action-btn" style="width: 35%;" onclick="searchCustomer()">Search</button>
+        </div>
+        
+        <!-- List will appear here -->
         <div id="upcoming-list"></div>
     </div>
 </div>
@@ -129,7 +135,7 @@
         isSubmitting = true;
         saveBtn.innerText = "Processing... ⏳"; 
         saveBtn.disabled = true; 
-        statusMsg.innerHTML = "Processing your data using AI...";
+        statusMsg.innerHTML = "Processing your data...";
         statusMsg.style.background = "#fef9c3"; 
         statusMsg.style.color = "#854d0e";
 
@@ -141,7 +147,7 @@
             const result = await response.json();
             
             if(result.status === "success") {
-                statusMsg.innerHTML = "✅ Data saved successfully! (Click 'Recent Saves' to verify)";
+                statusMsg.innerHTML = "✅ Data saved successfully! (Click 'Check Recent Saves' below to verify)";
                 statusMsg.style.background = "#dcfce7";
                 statusMsg.style.color = "#166534";
                 textOutput.value = ""; 
@@ -153,7 +159,7 @@
                 throw new Error(result.message);
             }
         } catch (error) {
-            statusMsg.innerHTML = "⚠️ <b>Network Issue!</b> Check 'Recent Saves 🕒' before trying again.";
+            statusMsg.innerHTML = "⚠️ <b>Network Issue!</b> Check 'Recent Saves 🕒' below before trying again.";
             statusMsg.style.background = "#fee2e2";
             statusMsg.style.color = "#991b1b";
             
@@ -271,7 +277,6 @@
             let html = "";
             let count = 0;
             
-            // Reverse so newest entries come first
             data.reverse().forEach(item => {
                 const nameMatch = item.name && item.name.toLowerCase().includes(query);
                 const placeMatch = item.place && item.place.toLowerCase().includes(query);
