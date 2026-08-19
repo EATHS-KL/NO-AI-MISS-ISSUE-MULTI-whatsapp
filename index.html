@@ -423,9 +423,6 @@ const payload = {
     function closeModal() { editModal.style.display = "none"; }
 
     async function submitUpdate() {
-        updateBtn.innerText = "Updating... ⏳";
-        updateBtn.disabled = true;
-
         const payload = {
             action: "edit",
             salesman: getSalesmanName(),
@@ -438,20 +435,29 @@ const payload = {
             }
         };
 
-        try {
-            const response = await fetch(WEB_APP_URL, { method: 'POST', body: JSON.stringify(payload) });
-            const result = await response.json();
-            if(result.status === "success") {
-                alert("✅ Updated Successfully!");
-                closeModal();
-                fetchRecentSaves(); 
-            } else { throw new Error("Update Failed"); }
-        } catch (error) {
-            alert("❌ Edit requires stable network. Please try again.");
-        } finally {
-            updateBtn.innerText = "Update Entry ✅";
-            updateBtn.disabled = false;
-        }
+        // 1. तुरंत पॉप-अप बंद कर दो (कोई इंतज़ार नहीं)
+        closeModal();
+
+        // 2. ऊपर स्टेटस मैसेज दिखा दो कि बैकग्राउंड में काम हो रहा है
+        const statusMsg = document.getElementById('status-msg');
+        statusMsg.innerHTML = "🔄 Edit syncing in background...";
+        statusMsg.style.background = "#e0f2fe";
+        statusMsg.style.color = "#0284c7";
+
+        // 3. इस एडिट वाले डेटा को भी अपनी 'WhatsApp वाली Queue' में डाल दो
+        syncQueue.push(payload);
+        localStorage.setItem('syncQueue', JSON.stringify(syncQueue));
+        
+        // 4. बैकग्राउंड सिंक प्रोसेस शुरू कर दो
+        processQueue();
+        
+        // 5. 3 सेकंड बाद अपने आप लिस्ट रिफ्रेश कर दो ताकि अपडेटेड डेटा दिख जाए
+        setTimeout(() => {
+            // अगर सेल्समैन ने कोई और सर्च नहीं किया है, तो रीसेंट सेव्स दिखा दो
+            if(document.getElementById('upcoming-list').innerHTML.includes('Latest 5 Entries')) {
+                fetchRecentSaves();
+            }
+        }, 3000);
     }
 </script>
 
