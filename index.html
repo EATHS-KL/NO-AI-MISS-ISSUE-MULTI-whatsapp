@@ -10,15 +10,23 @@
         body { font-family: 'Inter', sans-serif; background-color: #f0f2f5; margin: 0; padding: 20px 15px; color: #333; }
         .container { max-width: 420px; margin: 0 auto; background: #ffffff; padding: 25px 20px; border-radius: 16px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); }
         
-        .header { text-align: center; margin-bottom: 20px; }
+        .header { text-align: center; margin-bottom: 15px; }
         .header h2 { color: #1e293b; margin: 0; font-size: 22px; font-weight: 700; letter-spacing: -0.5px; }
         
         .user-profile { background: #eff6ff; border: 1px dashed #93c5fd; padding: 10px; border-radius: 8px; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
         .user-profile input { flex: 1; border: none; background: transparent; font-size: 15px; font-weight: 600; color: #1d4ed8; font-family: inherit; outline: none; }
-        .user-profile input::placeholder { color: #93c5fd; font-weight: 400; }
         .user-icon { background: #3b82f6; color: white; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; }
+        #status-msg { font-size: 13px; color: #475569; background: #e2e8f0; padding: 8px 12px; border-radius: 6px; margin-bottom: 15px; text-align: center; font-weight: 500; transition: 0.3s; }
 
-        #text-output { width: 100%; height: 120px; padding: 15px; border: 1.5px solid #e2e8f0; border-radius: 12px; font-size: 16px; font-family: inherit; box-sizing: border-box; resize: none; background-color: #f8fafc; transition: all 0.3s ease; line-height: 1.5; }
+        .tab-toggle { display: flex; background: #e2e8f0; border-radius: 10px; padding: 4px; margin-bottom: 20px; }
+        .tab-btn { flex: 1; padding: 12px 10px; border: none; background: transparent; font-weight: 600; font-size: 14px; color: #64748b; border-radius: 8px; cursor: pointer; transition: 0.3s; }
+        .tab-btn.active { background: white; color: #1d4ed8; box-shadow: 0 2px 5px rgba(0,0,0,0.08); }
+        .tab-content { display: none; animation: fadeIn 0.3s ease; }
+        .tab-content.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* Form Elements - Now height adjusted for 7 items */
+        #text-output { width: 100%; height: 135px; padding: 15px; border: 1.5px solid #e2e8f0; border-radius: 12px; font-size: 15px; font-family: inherit; box-sizing: border-box; resize: none; background-color: #f8fafc; transition: all 0.3s ease; line-height: 1.5; }
         #text-output:focus { outline: none; border-color: #3b82f6; background-color: #fff; box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1); }
 
         .live-validator { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; padding: 10px; background: #f8fafc; border-radius: 8px; border: 1px solid #e2e8f0; }
@@ -26,45 +34,50 @@
         .badge-invalid { background: #fee2e2; color: #991b1b; border: 1px solid #fca5a5; }
         .badge-valid { background: #dcfce7; color: #166534; border: 1px solid #86efac; }
 
-        #save-btn { background: linear-gradient(135deg, #2563eb, #1d4ed8); color: white; border: none; border-radius: 10px; width: 100%; padding: 16px; font-size: 16px; cursor: pointer; margin-top: 15px; font-weight: 600; transition: transform 0.2s, box-shadow 0.2s; box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2); }
-        #save-btn:active { transform: translateY(2px); }
+        #save-btn { background: linear-gradient(135deg, #2563eb, #1d4ed8); color: white; border: none; border-radius: 10px; width: 100%; padding: 16px; font-size: 16px; cursor: pointer; margin-top: 15px; margin-bottom: 20px; font-weight: 600; transition: transform 0.2s, box-shadow 0.2s; box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2); }
         #save-btn:disabled { background: #cbd5e1; cursor: not-allowed; box-shadow: none; transform: none; color: #64748b; }
 
-        .dashboard-section { margin-top: 30px; background: #f8fafc; padding: 20px; border-radius: 12px; border: 1px solid #e2e8f0; }
-        
+        .dashboard-section { background: #f8fafc; padding: 20px; border-radius: 12px; border: 1px solid #e2e8f0; margin-bottom: 15px; }
         .section-header-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
         .section-title { margin: 0; color: #334155; font-size: 16px; font-weight: 600; }
-        .refresh-btn { background: #e0e7ff; color: #4f46e5; border: 1px solid #c7d2fe; padding: 4px 8px; border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer; }
+        .refresh-btn { background: #e0e7ff; color: #4f46e5; border: 1px solid #c7d2fe; padding: 6px 12px; border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer; }
+        .copy-list-btn { background: #dcfce7; color: #166534; border: 1px solid #86efac; padding: 6px 12px; border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer; margin-left: 5px; }
 
-        #status-msg { font-size: 13px; color: #475569; background: #e2e8f0; padding: 8px 12px; border-radius: 6px; margin-bottom: 20px; text-align: center; font-weight: 500; transition: 0.3s; }
+        .chip-container { display: flex; gap: 8px; margin-bottom: 12px; flex-wrap: wrap; }
+        .chip-btn { flex: 1; min-width: 30%; background: #e0e7ff; color: #4f46e5; border: 1px solid #c7d2fe; padding: 10px 5px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; transition: 0.2s; text-align: center; }
+        .active-filter { background: #1e40af !important; color: white !important; border-color: #1e3a8a !important; box-shadow: inset 0 2px 4px rgba(0,0,0,0.1); }
+        .recent-btn { background: #fce7f3; color: #db2777; border-color: #fbcfe8; width: 100%; margin-bottom: 0; }
+        .clear-btn { background: #fee2e2; color: #991b1b; border: 1px solid #fca5a5; flex: 0.3; }
 
-        .chip-container { display: flex; gap: 8px; margin-bottom: 12px; }
-        .chip-btn { flex: 1; background: #e0e7ff; color: #4f46e5; border: 1px solid #c7d2fe; padding: 10px 5px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; transition: 0.2s; }
-        .recent-btn { background: #fce7f3; color: #db2777; border-color: #fbcfe8; width: 100%; margin-bottom: 12px; }
-        
         .filter-container { display: flex; gap: 10px; margin-bottom: 12px; }
         .search-box { width: 100%; padding: 12px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 14px; font-family: inherit; box-sizing: border-box; }
         .search-box:focus { outline: none; border-color: #3b82f6; }
-        
         input[type="number"]::-webkit-inner-spin-button, input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
         input[type="number"] { -moz-appearance: textfield; }
         #days-input { width: 35%; padding: 12px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 14px; text-align: center; }
         .action-btn { width: 65%; background: #0f172a; color: white; border: none; border-radius: 8px; font-size: 14px; cursor: pointer; font-weight: 600; }
 
-        .divider { border-top: 1px dashed #cbd5e1; margin: 25px 0; }
-
-        #upcoming-list { margin-top: 20px; }
+        /* Card Styles */
+        .list-container { margin-top: 15px; }
         .task-card { background: #ffffff; padding: 15px; border-radius: 10px; border: 1px solid #e2e8f0; margin-bottom: 12px; box-shadow: 0 2px 4px rgba(0,0,0,0.02); text-align: left; }
         .task-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px; }
         .task-name-group { display: flex; flex-direction: column; }
         .task-name { font-weight: 600; color: #1e293b; font-size: 15px; }
         .task-meta { font-size: 12px; color: #64748b; margin-top: 2px; }
-        .task-date { background: #eff6ff; color: #2563eb; padding: 4px 8px; border-radius: 6px; font-size: 12px; font-weight: 600; white-space: nowrap; }
-        .status-badge { display: inline-block; padding: 2px 6px; border-radius: 4px; font-size: 10px; font-weight: 600; margin-top: 4px; background: #f1f5f9; color: #475569; }
+        .task-date { background: #eff6ff; color: #2563eb; padding: 4px 8px; border-radius: 6px; font-size: 12px; font-weight: 600; white-space: nowrap; margin-bottom: 8px; display: inline-block;}
+        .status-badge { display: inline-block; padding: 2px 6px; border-radius: 4px; font-size: 10px; font-weight: 600; margin-top: 4px; }
         .task-req { color: #475569; font-size: 14px; line-height: 1.4; border-top: 1px dashed #e2e8f0; padding-top: 8px; margin-top: 8px; }
+        .task-notes { background: #fef3c7; color: #92400e; padding: 8px; border-radius: 6px; font-size: 13px; margin-top: 8px; font-weight: 500; border-left: 3px solid #f59e0b; }
         .summary-badge { background: #dcfce7; color: #166534; padding: 8px 12px; border-radius: 6px; font-weight: 600; font-size: 13px; margin-bottom: 15px; text-align: center; }
 
-        .edit-btn { background: #fffbeb; color: #d97706; border: 1px solid #fde68a; padding: 4px 8px; border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer; margin-top: 8px; display: inline-block; }
+        /* 🔴 3-DOTS MENU CSS 🔴 */
+        .menu-container { position: relative; display: inline-block; }
+        .menu-btn { background: none; border: none; font-size: 22px; cursor: pointer; color: #94a3b8; padding: 0 5px; line-height: 1; }
+        .menu-dropdown { display: none; position: absolute; right: 0; top: 25px; background: white; box-shadow: 0 5px 20px rgba(0,0,0,0.15); border-radius: 8px; z-index: 10; width: 140px; overflow: hidden; border: 1px solid #e2e8f0; }
+        .menu-dropdown.show { display: block; animation: fadeIn 0.15s ease; }
+        .menu-item { display: block; padding: 12px 15px; text-decoration: none; color: #334155; font-size: 13px; font-weight: 600; border-bottom: 1px solid #f1f5f9; cursor: pointer; text-align: left; background: none; border: none; width: 100%; box-sizing: border-box; font-family: inherit;}
+        .menu-item:hover { background: #f8fafc; color: #2563eb; }
+        .menu-item:last-child { border-bottom: none; }
 
         /* Modal CSS */
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; align-items: center; justify-content: center; }
@@ -90,50 +103,72 @@
         <input type="text" id="salesman-name" placeholder="Enter Your Name (e.g. Rahul)" oninput="saveName()">
     </div>
 
-    <textarea id="text-output" placeholder="Format: Name, Place, Requirement, Budget, Date&#10;Ex: Sandeep, Surat, Kurti & Saree, 45000, 25/09/2026"></textarea>
-    
-    <div class="live-validator" id="live-validator">
-        <div class="live-badge badge-invalid" id="badge-name">❌ Name</div>
-        <div class="live-badge badge-invalid" id="badge-place">❌ Place</div>
-        <div class="live-badge badge-invalid" id="badge-req">❌ Req.</div>
-        <div class="live-badge badge-invalid" id="badge-budget">❌ Budget</div>
-        <div class="live-badge badge-invalid" id="badge-date">❌ Date</div>
+    <div id="status-msg">System Ready 🟢</div>
+
+    <div class="tab-toggle">
+        <button class="tab-btn active" id="btn-tab-add" onclick="switchTab('add')">➕ Add Lead</button>
+        <button class="tab-btn" id="btn-tab-search" onclick="switchTab('search')">🔍 Search & Filter</button>
     </div>
 
-    <button id="save-btn" disabled>Fill all 5 parts to Save 🔒</button>
-
-    <div class="dashboard-section">
-        <div id="status-msg">System Ready 🟢</div>
+    <!-- ================= TAB 1: ADD LEAD ================= -->
+    <div id="tab-add" class="tab-content active">
+        <textarea id="text-output" placeholder="Format: Name, Phone, Place, Requirement, Budget, Date, Remarks&#10;Ex: Sandeep, 9876543210, Surat, Kurti, 45000, 25/09/2026, Fast delivery needed"></textarea>
         
-        <div class="section-header-row">
-            <h4 class="section-title">🗓️ Date Filters</h4>
-            <!-- New Refresh Button -->
-            <button class="refresh-btn" onclick="fetchDataFromServer(false)">Refresh 🔄</button>
-        </div>
-        
-        <div class="chip-container">
-            <button class="chip-btn" onclick="fetchLeads('week')">This Week</button>
-            <button class="chip-btn" onclick="fetchLeads('month')">This Month</button>
+        <div class="live-validator" id="live-validator">
+            <div class="live-badge badge-invalid" id="badge-name">❌ Name</div>
+            <div class="live-badge badge-invalid" id="badge-phone">❌ Phone</div>
+            <div class="live-badge badge-invalid" id="badge-place">❌ Place</div>
+            <div class="live-badge badge-invalid" id="badge-req">❌ Req.</div>
+            <div class="live-badge badge-invalid" id="badge-budget">❌ Budget</div>
+            <div class="live-badge badge-invalid" id="badge-date">❌ Date</div>
+            <div class="live-badge badge-invalid" id="badge-remarks">❌ Remarks</div>
         </div>
 
-        <div class="filter-container">
-            <input type="number" id="days-input" placeholder="Custom Days" min="1">
-            <button class="action-btn" onclick="fetchCustomLeads()">Filter by Days</button>
+        <button id="save-btn" disabled>Fill all 7 parts to Save 🔒</button>
+
+        <div class="dashboard-section">
+            <div style="display: flex; gap: 8px;">
+                <button class="chip-btn recent-btn filter-btn" onclick="fetchRecentSaves(this)">Check Recent Saves 🕒</button>
+                <button class="chip-btn clear-btn" onclick="clearResults()">Clear ✖</button>
+            </div>
+            <div id="recent-list" class="list-container"></div>
         </div>
-        
-        <div class="divider"></div>
+    </div>
 
-        <h4 class="section-title">🔍 Search & Verify</h4>
-        <button class="chip-btn recent-btn" onclick="fetchRecentSaves()">Check Recent Saves 🕒</button>
+    <!-- ================= TAB 2: SEARCH & FILTERS ================= -->
+    <div id="tab-search" class="tab-content">
+        <div class="dashboard-section">
+            <div class="section-header-row">
+                <h4 class="section-title">🗓️ Date Filters</h4>
+                <div>
+                    <button class="refresh-btn" onclick="fetchDataFromServer(false)">Refresh 🔄</button>
+                    <!-- 🔴 COPY LIST BUTTON 🔴 -->
+                    <button class="copy-list-btn" onclick="copyCurrentList()">📋 Copy List</button>
+                </div>
+            </div>
+            
+            <div class="chip-container">
+                <button class="chip-btn filter-btn" onclick="fetchLeads('today', 0, this)">Today</button>
+                <button class="chip-btn filter-btn" onclick="fetchLeads('week', 0, this)">This Week</button>
+                <button class="chip-btn filter-btn" onclick="fetchLeads('month', 0, this)">This Month</button>
+            </div>
 
-        <!-- Live Search Box (Button removed as it searches automatically now) -->
-        <input type="text" id="search-input" class="search-box" placeholder="Start typing name or place to search...">
-        
-        <div id="upcoming-list"></div>
+            <div class="filter-container">
+                <input type="number" id="days-input" placeholder="Custom Days" min="1">
+                <button class="action-btn filter-btn" onclick="fetchCustomLeads(this)">Filter Days</button>
+                <button class="chip-btn clear-btn" style="margin:0; padding: 12px 5px;" onclick="clearResults()">Clear ✖</button>
+            </div>
+        </div>
+
+        <div class="dashboard-section">
+            <h4 class="section-title" style="margin-bottom: 15px;">🔍 Search Database</h4>
+            <input type="text" id="search-input" class="search-box" placeholder="Start typing name or place...">
+            <div id="search-list" class="list-container"></div>
+        </div>
     </div>
 </div>
 
-<!-- Edit Modal (Popup) -->
+<!-- ================= EDIT MODAL ================= -->
 <div class="modal-overlay" id="edit-modal">
     <div class="modal-box">
         <div class="modal-header">
@@ -141,14 +176,26 @@
             <button class="close-modal" onclick="closeModal()">✖</button>
         </div>
         <input type="hidden" id="edit-row-index">
+        
         <div class="input-group">
             <label>Customer Status</label>
             <select id="edit-status">
-                <option value="Follow-up">Follow-up 🔄</option>
-                <option value="Closed">Closed / Deal Done ✅</option>
-                <option value="Not Interested">Not Interested ❌</option>
+                <option value="Follow-up 🔄">Follow-up 🔄</option>
+                <option value="Cancel / Not Interested ❌">Cancel / Not Interested ❌</option>
+                <option value="Deal Done ✅">Deal Done ✅</option>
             </select>
         </div>
+        
+        <div class="input-group">
+            <label>Phone Number</label>
+            <input type="text" id="edit-phone" placeholder="e.g., 9876543210">
+        </div>
+
+        <div class="input-group">
+            <label>Remarks / Notes</label>
+            <input type="text" id="edit-remarks" placeholder="e.g., Deal done at 40k">
+        </div>
+
         <div class="input-group">
             <label>Follow-up Date</label>
             <input type="text" id="edit-date" placeholder="DD/MM/YYYY">
@@ -169,51 +216,61 @@
     // 👇 YOUR WEB APP URL GOES HERE 👇
     const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbxH6Q3YTM-v7AmqhYe0BQn4zK-vD_-jIyl252KVTRj6BiuwsBkQ9HFmcXgC7URCyddd/exec'; 
 
+    let currentDisplayedList = []; // For copying full list
+
+    function switchTab(tabName) {
+        document.getElementById('btn-tab-add').classList.remove('active');
+        document.getElementById('btn-tab-search').classList.remove('active');
+        document.getElementById('tab-add').classList.remove('active');
+        document.getElementById('tab-search').classList.remove('active');
+        document.getElementById('btn-tab-' + tabName).classList.add('active');
+        document.getElementById('tab-' + tabName).classList.add('active');
+    }
+
     const saveBtn = document.getElementById('save-btn');
     const textOutput = document.getElementById('text-output');
     const statusMsg = document.getElementById('status-msg');
-    const upcomingList = document.getElementById('upcoming-list');
+    const recentList = document.getElementById('recent-list');
+    const searchList = document.getElementById('search-list');
     const daysInput = document.getElementById('days-input');
     const searchInput = document.getElementById('search-input');
     const salesmanInput = document.getElementById('salesman-name');
 
-    // 🟢 SMART LOCAL CACHING (THE SPEED SECRET) 🟢
     let localDataStore = [];
     let isDataLoaded = false;
-
     let syncQueue = JSON.parse(localStorage.getItem('syncQueue')) || [];
     let isSyncing = false;
 
     window.onload = () => {
         const savedName = localStorage.getItem('salesman_name');
-        if (savedName) {
-            salesmanInput.value = savedName;
-            // ऐप खुलते ही बैकग्राउंड में एक बार डेटा लाओ
-            fetchDataFromServer(true); 
-        }
+        if (savedName) { salesmanInput.value = savedName; fetchDataFromServer(true); }
         processQueue(); 
     };
 
-    function saveName() { 
-        localStorage.setItem('salesman_name', salesmanInput.value.trim()); 
-        fetchDataFromServer(true); // नाम बदलते ही डेटा लाओ
-    }
-
+    function saveName() { localStorage.setItem('salesman_name', salesmanInput.value.trim()); fetchDataFromServer(true); }
     function getSalesmanName() {
         const name = salesmanInput.value.trim();
         return name === "" ? "Unknown Salesman" : name.charAt(0).toUpperCase() + name.slice(1).toLowerCase();
     }
 
-    // यह फंक्शन Google से डेटा लाकर फोन में रख लेगा
+    function setActiveButton(clickedBtn) {
+        document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active-filter'));
+        if(clickedBtn) clickedBtn.classList.add('active-filter');
+    }
+
+    function clearResults() {
+        recentList.innerHTML = "";
+        searchList.innerHTML = "";
+        searchInput.value = "";
+        document.getElementById('days-input').value = "";
+        currentDisplayedList = [];
+        setActiveButton(null); 
+    }
+
     async function fetchDataFromServer(quiet = false) {
         const currentSalesman = getSalesmanName();
         if(currentSalesman === "Unknown Salesman") return;
-
-        if(!quiet) {
-            statusMsg.innerHTML = "🔄 Fetching latest data...";
-            statusMsg.style.background = "#e0f2fe";
-            statusMsg.style.color = "#0284c7";
-        }
+        if(!quiet) { statusMsg.innerHTML = "🔄 Fetching latest data..."; statusMsg.style.background = "#e0f2fe"; statusMsg.style.color = "#0284c7"; }
 
         try {
             const url = `${WEB_APP_URL}?user=${encodeURIComponent(currentSalesman)}`;
@@ -222,62 +279,40 @@
             isDataLoaded = true;
             
             if(!quiet) {
-                statusMsg.innerHTML = "✅ Data is up to date!";
-                statusMsg.style.background = "#dcfce7";
-                statusMsg.style.color = "#166534";
-                fetchRecentSaves(); // मैन्युअल रिफ्रेश पर रीसेंट दिखा दो
+                statusMsg.innerHTML = "✅ Data is up to date!"; statusMsg.style.background = "#dcfce7"; statusMsg.style.color = "#166534";
+                if(document.querySelector('.recent-btn').classList.contains('active-filter')) fetchRecentSaves(document.querySelector('.recent-btn'));
+                if(searchInput.value !== "") searchCustomer(); 
             }
         } catch (error) {
-            if(!quiet) {
-                statusMsg.innerHTML = "⚠️ Failed to refresh data. Check connection.";
-                statusMsg.style.background = "#fee2e2";
-                statusMsg.style.color = "#991b1b";
-            }
+            if(!quiet) { statusMsg.innerHTML = "⚠️ Failed to refresh data."; statusMsg.style.background = "#fee2e2"; statusMsg.style.color = "#991b1b"; }
         }
     }
 
     async function processQueue() {
         if (isSyncing || syncQueue.length === 0) return;
-        
         if (!navigator.onLine) {
             statusMsg.innerHTML = `📶 Offline. ${syncQueue.length} entry waiting to sync...`;
-            statusMsg.style.background = "#fef9c3";
-            statusMsg.style.color = "#854d0e";
+            statusMsg.style.background = "#fef9c3"; statusMsg.style.color = "#854d0e";
             return;
         }
 
         isSyncing = true;
-        statusMsg.innerHTML = `🔄 Syncing in background...`;
-        statusMsg.style.background = "#e0f2fe";
-        statusMsg.style.color = "#0284c7";
-
+        statusMsg.innerHTML = `🔄 Syncing in background...`; statusMsg.style.background = "#e0f2fe"; statusMsg.style.color = "#0284c7";
         const payload = syncQueue[0]; 
-
         try {
             await fetch(WEB_APP_URL, { method: 'POST', body: JSON.stringify(payload) });
             syncQueue.shift();
             localStorage.setItem('syncQueue', JSON.stringify(syncQueue));
-            
-            // डेटा सिंक होने के बाद, चुपचाप नया डेटा मंगा लो ताकि मेमोरी अपडेट हो जाए
             fetchDataFromServer(true);
-            
             if(syncQueue.length === 0) {
-                statusMsg.innerHTML = "✅ All data synced perfectly!";
-                statusMsg.style.background = "#dcfce7";
-                statusMsg.style.color = "#166534";
+                statusMsg.innerHTML = "✅ All data synced perfectly!"; statusMsg.style.background = "#dcfce7"; statusMsg.style.color = "#166534";
             }
         } catch (error) {
-            if (navigator.onLine) {
-                syncQueue.shift();
-                localStorage.setItem('syncQueue', JSON.stringify(syncQueue));
-                fetchDataFromServer(true);
-            }
+            if (navigator.onLine) { syncQueue.shift(); localStorage.setItem('syncQueue', JSON.stringify(syncQueue)); fetchDataFromServer(true); }
         }
-        
         isSyncing = false;
         processQueue(); 
     }
-
     window.addEventListener('online', processQueue);
 
     let parsedDataStore = {}; 
@@ -286,24 +321,23 @@
         const parts = text.split(',');
 
         const name = parts[0] ? parts[0].trim() : "";
-        const place = parts[1] ? parts[1].trim() : "";
-        const req = parts[2] ? parts[2].trim() : "";
-        const budget = parts[3] ? parts[3].trim() : "";
-        const date = parts[4] ? parts[4].trim() : "";
+        const phone = parts[1] ? parts[1].trim() : "";
+        const place = parts[2] ? parts[2].trim() : "";
+        const req = parts[3] ? parts[3].trim() : "";
+        const budget = parts[4] ? parts[4].trim() : "";
+        const date = parts[5] ? parts[5].trim() : "";
+        const remarks = parts[6] ? parts[6].trim() : "";
 
-        updateBadge('badge-name', name, 'Name');
-        updateBadge('badge-place', place, 'Place');
-        updateBadge('badge-req', req, 'Req.');
-        updateBadge('badge-budget', budget, 'Budget');
-        updateBadge('badge-date', date, 'Date');
+        updateBadge('badge-name', name, 'Name'); updateBadge('badge-phone', phone, 'Phone');
+        updateBadge('badge-place', place, 'Place'); updateBadge('badge-req', req, 'Req.'); 
+        updateBadge('badge-budget', budget, 'Budget'); updateBadge('badge-date', date, 'Date');
+        updateBadge('badge-remarks', remarks, 'Remarks');
 
-        if (name && place && req && budget && date) {
-            saveBtn.disabled = false;
-            saveBtn.innerText = "Save Entry 💾";
-            parsedDataStore = { name, place, req, budget, date };
+        if (name && phone && place && req && budget && date && remarks) {
+            saveBtn.disabled = false; saveBtn.innerText = "Save Entry 💾";
+            parsedDataStore = { name, phone, place, req, budget, date, remarks };
         } else {
-            saveBtn.disabled = true;
-            saveBtn.innerText = "Fill all 5 parts to Save 🔒";
+            saveBtn.disabled = true; saveBtn.innerText = "Fill all 7 parts to Save 🔒";
         }
     });
 
@@ -315,130 +349,188 @@
 
     saveBtn.addEventListener('click', () => {
         if(salesmanInput.value.trim() === "") { alert("Please enter your name at the top first!"); salesmanInput.focus(); return; }
-        
         const currentSalesman = getSalesmanName();
         const rawText = textOutput.value.trim();
         const uniqueId = Date.now().toString(36) + Math.random().toString(36).substr(2); 
 
         const payload = { action: "add", raw: rawText, parsed: parsedDataStore, salesman: currentSalesman, uid: uniqueId };
         
-        textOutput.value = ""; 
-        textOutput.dispatchEvent(new Event('input')); 
-        
-        syncQueue.push(payload);
-        localStorage.setItem('syncQueue', JSON.stringify(syncQueue));
-        processQueue();
+        textOutput.value = ""; textOutput.dispatchEvent(new Event('input')); 
+        syncQueue.push(payload); localStorage.setItem('syncQueue', JSON.stringify(syncQueue)); processQueue();
     });
 
-    function createCardHTML(item, showTimestamp = false) {
-        let placeBudgetTxt = `(${item.place !== "N/A" ? item.place : 'Unknown'} - ₹${item.budget !== "N/A" ? item.budget : '0'})`;
-        let dateDisplay = `<span class="task-date">🗓️ ${item.followUpDate}</span>`;
-        if (showTimestamp) dateDisplay = `<span class="task-date" style="background:#fce7f3; color:#db2777;">🕒 ${item.timestamp.split(',')[1] || item.timestamp}</span>`;
+    // 🔴 3-DOT MENU LOGIC 🔴
+    function toggleMenu(event, id) {
+        event.stopPropagation();
+        const dropdown = document.getElementById(id);
+        const isShowing = dropdown.classList.contains('show');
+        document.querySelectorAll('.menu-dropdown').forEach(m => m.classList.remove('show'));
+        if (!isShowing) dropdown.classList.add('show');
+    }
+    window.onclick = function(event) {
+        if (!event.target.matches('.menu-btn')) {
+            document.querySelectorAll('.menu-dropdown').forEach(m => m.classList.remove('show'));
+        }
+    }
+
+    // Copy Single Item
+    function copySingleLead(text) {
+        navigator.clipboard.writeText(text).then(() => { alert('📋 Copied to clipboard!'); });
+    }
+
+    // 🔴 COPY FULL LIST LOGIC 🔴
+    function copyCurrentList() {
+        if(currentDisplayedList.length === 0) { alert("⚠️ No records to copy! Search or filter first."); return; }
         
-        let statusColor = item.status === "Closed" ? "background:#dcfce7; color:#166534;" : 
-                          item.status === "Not Interested" ? "background:#fee2e2; color:#991b1b;" : "";
-        const safeReq = item.req ? item.req.replace(/'/g, "\\'") : "";
+        let textToCopy = `📊 *Lead Report (${getSalesmanName()})*\n\n`;
+        currentDisplayedList.forEach(item => {
+            textToCopy += `👤 *${item.name}* (${item.place})\n📞 ${item.phone}\n📝 Req: ${item.req}\n💰 Budget: ₹${item.budget}\n📅 Date: ${item.followUpDate}\n📌 Status: ${item.status}\nRemarks: ${item.remarks}\n-------------------\n`;
+        });
+        navigator.clipboard.writeText(textToCopy).then(() => { alert(`✅ ${currentDisplayedList.length} Leads copied for WhatsApp!`); });
+    }
+
+    function createCardHTML(item) {
+        let placeTxt = item.place && item.place !== "N/A" ? item.place : 'Unknown';
+        let phoneTxt = item.phone || 'No Number';
+        let budgetTxt = item.budget !== "N/A" ? `₹${item.budget}` : '0';
+        let dateDisplay = `<span class="task-date">🗓️ ${item.followUpDate}</span>`;
+        
+        let statusColor = "background:#f1f5f9; color:#475569;"; 
+        if(item.status && item.status.includes("Deal Done")) statusColor = "background:#dcfce7; color:#166534;";
+        else if(item.status && item.status.includes("Cancel")) statusColor = "background:#fee2e2; color:#991b1b;";
+        else if(item.status && item.status.includes("Follow-up")) statusColor = "background:#e0e7ff; color:#4f46e5;";
+        
+        let remarksHtml = item.remarks ? `<div class="task-notes">📌 Remarks: ${item.remarks}</div>` : '';
+
+        const safeReq = encodeURIComponent(item.req || "");
+        const safeRemarks = encodeURIComponent(item.remarks || "");
+        const safePhone = encodeURIComponent(item.phone || "");
+
+        // Clean phone for Call/WhatsApp
+        const cleanNum = item.phone ? item.phone.replace(/\D/g, '') : '';
+        const waNum = cleanNum.length === 10 ? '91' + cleanNum : cleanNum;
+        const waText = encodeURIComponent(`Hello ${item.name},\nRegarding your requirement for ${item.req}...`);
+        
+        // Data for copy
+        const copyText = `Name: ${item.name}\nPhone: ${item.phone}\nPlace: ${item.place}\nReq: ${item.req}\nBudget: ₹${item.budget}\nDate: ${item.followUpDate}\nRemarks: ${item.remarks}\nStatus: ${item.status}`;
 
         return `
             <div class="task-card">
                 <div class="task-header">
                     <div class="task-name-group">
                         <span class="task-name">👤 ${item.name}</span>
-                        <span class="task-meta">${placeBudgetTxt}</span>
-                        <span class="status-badge" style="${statusColor}">${item.status || 'Follow-up'}</span>
+                        <span class="task-meta">📞 ${phoneTxt} | 📍 ${placeTxt}</span>
+                        <span class="status-badge" style="${statusColor}">${item.status || 'Follow-up 🔄'}</span>
                     </div>
-                    ${dateDisplay}
+                    <div style="display:flex; flex-direction:column; align-items:flex-end;">
+                        ${dateDisplay}
+                        <div class="menu-container">
+                            <button class="menu-btn" onclick="toggleMenu(event, 'menu-${item.rowIndex}')">⋮</button>
+                            <div class="menu-dropdown" id="menu-${item.rowIndex}">
+                                <a href="tel:${cleanNum}" class="menu-item">📞 Call</a>
+                                <a href="https://wa.me/${waNum}?text=${waText}" target="_blank" class="menu-item">💬 WhatsApp</a>
+                                <button onclick="copySingleLead(\`${copyText}\`)" class="menu-item">📋 Copy Details</button>
+                                <button onclick="openModal(${item.rowIndex}, '${item.name}', '${item.status || 'Follow-up 🔄'}', '${item.followUpDate}', '${safeReq}', '${item.budget}', '${safeRemarks}', '${safePhone}')" class="menu-item">✏️ Edit</button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="task-req">📝 ${item.req}</div>
-                <button class="edit-btn" onclick="openModal(${item.rowIndex}, '${item.name}', '${item.status || 'Follow-up'}', '${item.followUpDate}', '${safeReq}', '${item.budget}')">Edit ✏️</button>
+                <div class="task-req">📝 ${item.req} - ${budgetTxt}</div>
+                ${remarksHtml}
             </div>`;
     }
-
-    // 🟢 ALL FETCH FUNCTIONS NOW USE LOCAL DATA (0 SECOND WAIT) 🟢
     
-    function fetchLeads(targetType, customDays = 0) {
+    function fetchLeads(targetType, customDays = 0, btnElement = null) {
         if(salesmanInput.value.trim() === "") { alert("Please enter your name first!"); return; }
-        if(!isDataLoaded) { upcomingList.innerHTML = "<p style='text-align:center;'>Loading data... Please wait ⏳</p>"; return; }
+        if(!isDataLoaded) { searchList.innerHTML = "<p style='text-align:center;'>Loading data... Please wait ⏳</p>"; return; }
         
+        setActiveButton(btnElement); searchInput.value = "";
         const today = new Date(); today.setHours(0,0,0,0);
         let targetDate = new Date(today); let label = "";
 
-        if (targetType === 'week') {
-            let day = today.getDay(); let diff = today.getDate() + (day === 0 ? 0 : 7 - day);
-            targetDate.setDate(diff); label = "this week";
-        } else if (targetType === 'month') {
-            targetDate = new Date(today.getFullYear(), today.getMonth() + 1, 0); label = "this month";
-        } else if (targetType === 'custom') {
-            targetDate.setDate(today.getDate() + customDays); label = `in next ${customDays} days`;
-        }
+        if (targetType === 'today') { targetDate = new Date(today); label = "today"; } 
+        else if (targetType === 'week') { let day = today.getDay(); let diff = today.getDate() + (day === 0 ? 0 : 7 - day); targetDate.setDate(diff); label = "this week"; } 
+        else if (targetType === 'month') { targetDate = new Date(today.getFullYear(), today.getMonth() + 1, 0); label = "this month"; } 
+        else if (targetType === 'custom') { targetDate.setDate(today.getDate() + customDays); label = `in next ${customDays} days`; }
         
-        let html = ""; let count = 0;
+        let html = ""; currentDisplayedList = [];
         localDataStore.forEach(item => {
             if(item.followUpDate && item.followUpDate !== "N/A" && item.followUpDate.includes("/")) {
                 const parts = item.followUpDate.split("/");
                 const fDate = new Date(parts[2], parts[1]-1, parts[0]); 
-                if(fDate >= today && fDate <= targetDate) { count++; html += createCardHTML(item); }
+                if(fDate >= today && fDate <= targetDate) { 
+                    currentDisplayedList.push(item);
+                    html += createCardHTML(item); 
+                }
             }
         });
 
         if(html === "") html = `<div class="summary-badge" style="background:#f8fafc; color:#475569;">👍 No follow-ups for ${getSalesmanName()} ${label}!</div>`;
-        else html = `<div class="summary-badge">Found ${count} follow-up(s) ${label}</div>` + html;
-        upcomingList.innerHTML = html;
+        else html = `<div class="summary-badge">Found ${currentDisplayedList.length} follow-up(s) ${label}</div>` + html;
+        searchList.innerHTML = html; 
     }
 
-    function fetchCustomLeads() {
+    function fetchCustomLeads(btnElement) {
         let customDays = parseInt(daysInput.value);
         if(isNaN(customDays) || customDays <= 0) { alert("Enter valid days"); return; }
-        fetchLeads('custom', customDays);
+        fetchLeads('custom', customDays, btnElement);
     }
 
-    function fetchRecentSaves() {
+    function fetchRecentSaves(btnElement = null) {
         if(salesmanInput.value.trim() === "") { alert("Please enter your name first!"); return; }
-        if(!isDataLoaded) { upcomingList.innerHTML = "<p style='text-align:center;'>Loading data... Please wait ⏳</p>"; return; }
+        if(!isDataLoaded) { recentList.innerHTML = "<p style='text-align:center;'>Loading data... Please wait ⏳</p>"; return; }
         
+        setActiveButton(btnElement);
         let html = `<div class="summary-badge" style="background:#fce7f3; color:#db2777;">Latest 5 Entries for ${getSalesmanName()}</div>`;
-        // Create a copy to reverse safely
-        const recentData = [...localDataStore].reverse().slice(0, 5);
-        recentData.forEach(item => { html += createCardHTML(item, true); });
         
-        if(recentData.length === 0) html = `<div class="summary-badge" style="background:#f8fafc; color:#475569;">No entries found.</div>`;
-        upcomingList.innerHTML = html;
+        currentDisplayedList = [...localDataStore].reverse().slice(0, 5);
+        currentDisplayedList.forEach(item => { html += createCardHTML(item); });
+        
+        if(currentDisplayedList.length === 0) html = `<div class="summary-badge" style="background:#f8fafc; color:#475569;">No entries found.</div>`;
+        recentList.innerHTML = html; 
     }
 
-    // 🟢 LIVE SEARCH FUNCTION (NO BUTTON NEEDED) 🟢
-    searchInput.addEventListener('input', searchCustomer);
-    
+    searchInput.addEventListener('input', () => { setActiveButton(null); searchCustomer(); });
+
     function searchCustomer() {
         if(salesmanInput.value.trim() === "") return;
         if(!isDataLoaded) return;
-        
         const query = searchInput.value.toLowerCase().trim();
-        if(query === "") { upcomingList.innerHTML = ""; return; }
+        if(query === "") { searchList.innerHTML = ""; currentDisplayedList = []; return; }
         
-        let html = ""; let count = 0;
-        
-        // Reverse array to show newest matches first
+        let html = ""; currentDisplayedList = [];
         [...localDataStore].reverse().forEach(item => {
             const nameMatch = item.name && item.name.toLowerCase().includes(query);
             const placeMatch = item.place && item.place.toLowerCase().includes(query);
             const reqMatch = item.req && item.req.toLowerCase().includes(query);
-            if(nameMatch || placeMatch || reqMatch) { count++; html += createCardHTML(item); }
+            const phoneMatch = item.phone && item.phone.toLowerCase().includes(query);
+            if(nameMatch || placeMatch || reqMatch || phoneMatch) { 
+                currentDisplayedList.push(item);
+                html += createCardHTML(item); 
+            }
         });
 
         if(html === "") html = `<div class="summary-badge" style="background:#fee2e2; color:#991b1b;">No results found for "${query}"</div>`;
-        else html = `<div class="summary-badge">Found ${count} result(s) for "${query}"</div>` + html;
-        upcomingList.innerHTML = html;
+        else html = `<div class="summary-badge">Found ${currentDisplayedList.length} result(s) for "${query}"</div>` + html;
+        searchList.innerHTML = html; 
     }
 
-    // Modal Logic
     const editModal = document.getElementById('edit-modal');
-    function openModal(rowIndex, name, status, date, req, budget) {
+    function openModal(rowIndex, name, status, date, encReq, budget, encRemarks, encPhone) {
         document.getElementById('edit-modal-title').innerText = "Edit: " + name;
         document.getElementById('edit-row-index').value = rowIndex;
-        document.getElementById('edit-status').value = status;
+        
+        const statusDropdown = document.getElementById('edit-status');
+        for (let i = 0; i < statusDropdown.options.length; i++) {
+            if (statusDropdown.options[i].value === status) { statusDropdown.selectedIndex = i; break; }
+        }
+        
+        document.getElementById('edit-phone').value = decodeURIComponent(encPhone || "");
         document.getElementById('edit-date').value = date;
-        document.getElementById('edit-req').value = req;
+        document.getElementById('edit-req').value = decodeURIComponent(encReq || "");
         document.getElementById('edit-budget').value = budget;
+        document.getElementById('edit-remarks').value = decodeURIComponent(encRemarks || "");
+        
         editModal.style.display = "flex";
     }
 
@@ -451,26 +543,21 @@
             rowIndex: document.getElementById('edit-row-index').value,
             updates: {
                 status: document.getElementById('edit-status').value,
+                phone: document.getElementById('edit-phone').value,
                 date: document.getElementById('edit-date').value,
                 req: document.getElementById('edit-req').value,
-                budget: document.getElementById('edit-budget').value
+                budget: document.getElementById('edit-budget').value,
+                remarks: document.getElementById('edit-remarks').value 
             }
         };
 
         closeModal();
         statusMsg.innerHTML = "🔄 Edit syncing in background...";
-        statusMsg.style.background = "#e0f2fe";
-        statusMsg.style.color = "#0284c7";
+        statusMsg.style.background = "#e0f2fe"; statusMsg.style.color = "#0284c7";
 
         syncQueue.push(payload);
         localStorage.setItem('syncQueue', JSON.stringify(syncQueue));
         processQueue();
-        
-        setTimeout(() => {
-            if(document.getElementById('upcoming-list').innerHTML.includes('Latest 5 Entries')) {
-                fetchRecentSaves();
-            }
-        }, 3000);
     }
 </script>
 
