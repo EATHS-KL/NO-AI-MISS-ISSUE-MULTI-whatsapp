@@ -38,10 +38,14 @@
         #save-btn:disabled { background: #cbd5e1; cursor: not-allowed; box-shadow: none; transform: none; color: #64748b; }
 
         .dashboard-section { background: #f8fafc; padding: 20px; border-radius: 12px; border: 1px solid #e2e8f0; margin-bottom: 15px; }
-        .section-header-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
-        .section-title { margin: 0; color: #334155; font-size: 16px; font-weight: 600; }
+        
+        /* 🔴 FIXED SECTION HEADER ROW 🔴 */
+        .section-header-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; flex-wrap: wrap; gap: 10px; }
+        .section-title { margin: 0; color: #334155; font-size: 16px; font-weight: 600; white-space: nowrap; }
+        .button-group { display: flex; gap: 8px; flex-wrap: wrap; justify-content: flex-end; }
+        
         .refresh-btn { background: #e0e7ff; color: #4f46e5; border: 1px solid #c7d2fe; padding: 6px 12px; border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer; }
-        .copy-list-btn { background: #dcfce7; color: #166534; border: 1px solid #86efac; padding: 6px 12px; border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer; margin-left: 5px; }
+        .copy-list-btn { background: #dcfce7; color: #166534; border: 1px solid #86efac; padding: 6px 12px; border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer; }
 
         .chip-container { display: flex; gap: 8px; margin-bottom: 12px; flex-wrap: wrap; }
         .chip-btn { flex: 1; min-width: 30%; background: #e0e7ff; color: #4f46e5; border: 1px solid #c7d2fe; padding: 10px 5px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; transition: 0.2s; text-align: center; }
@@ -70,7 +74,7 @@
         .task-notes { background: #fef3c7; color: #92400e; padding: 8px; border-radius: 6px; font-size: 13px; margin-top: 8px; font-weight: 500; border-left: 3px solid #f59e0b; }
         .summary-badge { background: #dcfce7; color: #166534; padding: 8px 12px; border-radius: 6px; font-weight: 600; font-size: 13px; margin-bottom: 15px; text-align: center; }
 
-        /* 🔴 3-DOTS MENU CSS 🔴 */
+        /* 3-DOTS MENU CSS */
         .menu-container { position: relative; display: inline-block; }
         .menu-btn { background: none; border: none; font-size: 22px; cursor: pointer; color: #94a3b8; padding: 0 5px; line-height: 1; }
         .menu-dropdown { display: none; position: absolute; right: 0; top: 25px; background: white; box-shadow: 0 5px 20px rgba(0,0,0,0.15); border-radius: 8px; z-index: 10; width: 140px; overflow: hidden; border: 1px solid #e2e8f0; }
@@ -138,11 +142,11 @@
     <!-- ================= TAB 2: SEARCH & FILTERS ================= -->
     <div id="tab-search" class="tab-content">
         <div class="dashboard-section">
+            <!-- 🔴 FIXED ALIGNMENT HERE 🔴 -->
             <div class="section-header-row">
                 <h4 class="section-title">🗓️ Date Filters</h4>
-                <div>
+                <div class="button-group">
                     <button class="refresh-btn" onclick="fetchDataFromServer(false)">Refresh 🔄</button>
-                    <!-- 🔴 COPY LIST BUTTON 🔴 -->
                     <button class="copy-list-btn" onclick="copyCurrentList()">📋 Copy List</button>
                 </div>
             </div>
@@ -213,10 +217,10 @@
 </div>
 
 <script>
-    // 👇 YOUR WEB APP URL GOES HERE 👇
+    // 👇 WEB APP URL ADDED HERE 👇
     const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbxH6Q3YTM-v7AmqhYe0BQn4zK-vD_-jIyl252KVTRj6BiuwsBkQ9HFmcXgC7URCyddd/exec'; 
 
-    let currentDisplayedList = []; // For copying full list
+    let currentDisplayedList = []; 
 
     function switchTab(tabName) {
         document.getElementById('btn-tab-add').classList.remove('active');
@@ -359,7 +363,6 @@
         syncQueue.push(payload); localStorage.setItem('syncQueue', JSON.stringify(syncQueue)); processQueue();
     });
 
-    // 🔴 3-DOT MENU LOGIC 🔴
     function toggleMenu(event, id) {
         event.stopPropagation();
         const dropdown = document.getElementById(id);
@@ -373,12 +376,10 @@
         }
     }
 
-    // Copy Single Item
     function copySingleLead(text) {
         navigator.clipboard.writeText(text).then(() => { alert('📋 Copied to clipboard!'); });
     }
 
-    // 🔴 COPY FULL LIST LOGIC 🔴
     function copyCurrentList() {
         if(currentDisplayedList.length === 0) { alert("⚠️ No records to copy! Search or filter first."); return; }
         
@@ -406,12 +407,10 @@
         const safeRemarks = encodeURIComponent(item.remarks || "");
         const safePhone = encodeURIComponent(item.phone || "");
 
-        // Clean phone for Call/WhatsApp
         const cleanNum = item.phone ? item.phone.replace(/\D/g, '') : '';
         const waNum = cleanNum.length === 10 ? '91' + cleanNum : cleanNum;
         const waText = encodeURIComponent(`Hello ${item.name},\nRegarding your requirement for ${item.req}...`);
         
-        // Data for copy
         const copyText = `Name: ${item.name}\nPhone: ${item.phone}\nPlace: ${item.place}\nReq: ${item.req}\nBudget: ₹${item.budget}\nDate: ${item.followUpDate}\nRemarks: ${item.remarks}\nStatus: ${item.status}`;
 
         return `
